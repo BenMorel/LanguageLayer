@@ -1,0 +1,19 @@
+{
+  "name": "benmorel/languagelayer",
+  "description": "LanguageLayer API client for PHP",
+  "type": "library",
+  "keywords": [
+    "LanguageLayer",
+    "APILayer",
+    "Language Detection"
+  ],
+  "license": "MIT",
+  "require": {
+    "php": ">=7.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "BenMorel\\LanguageLayer\\": "src/"
+    }
+  }
+}
