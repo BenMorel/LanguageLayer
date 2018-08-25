@@ -79,19 +79,28 @@ class LanguageLayerClient
     }
 
     /**
-     * Performs a reliable detection of the language of the given text.
+     * Attempts to detect a single language for the given text.
      *
-     * If there is no *reliable* detection result returned from the API, an exception is thrown.
+     * If the API returns several results, the first reliable result is returned.
+     * If the API returns a single result, this result is returned unless `$forceReliable` is set to true.
      *
-     * @param string $text The text to detect.
+     * If no acceptable language is found, an exception is thrown.
+     *
+     * @param string $text          The text to detect.
+     * @param bool   $forceReliable If false (default), a single language, even if not reliable, is accepted.
+     *                              If true, this method will only return a reliable result or throw an exception.
      *
      * @return string The 2-digit language code of the detected language.
      *
-     * @throws LanguageDetectionException If the detection fails, or there is no reliable result.
+     * @throws LanguageDetectionException If the detection fails, or there is no acceptable result.
      */
-    public function detectLanguage(string $text) : ?string
+    public function detectLanguage(string $text, bool $forceReliable = false) : ?string
     {
         $results = $this->detectLanguages($text);
+
+        if (! $forceReliable && count($results) === 1) {
+            return $results[0];
+        }
 
         foreach ($results as $result) {
             if ($result->isReliableResult()) {
