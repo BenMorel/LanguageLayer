@@ -35,13 +35,17 @@ class LanguageLayerClient
     }
 
     /**
-     * @param string $text
+     * Detects the possible languages for the given text.
+     *
+     * Several results may be returned.
+     *
+     * @param string $text The text to detect.
      *
      * @return LanguageDetectionResult[]
      *
-     * @throws LanguageDetectionException
+     * @throws LanguageDetectionException If the detection fails for any reason.
      */
-    public function detectLanguage(string $text) : array
+    public function detectLanguages(string $text) : array
     {
         try {
             $response = $this->httpClient->request('GET', self::ENDPOINT, [
@@ -72,5 +76,29 @@ class LanguageLayerClient
         }
 
         return $results;
+    }
+
+    /**
+     * Performs a reliable detection of the language of the given text.
+     *
+     * If there is no *reliable* detection result returned from the API, an exception is thrown.
+     *
+     * @param string $text The text to detect.
+     *
+     * @return string The 2-digit language code of the detected language.
+     *
+     * @throws LanguageDetectionException If the detection fails, or there is no reliable result.
+     */
+    public function detectLanguage(string $text) : ?string
+    {
+        $results = $this->detectLanguages($text);
+
+        foreach ($results as $result) {
+            if ($result->isReliableResult()) {
+                return $result->getLanguageCode();
+            }
+        }
+
+        throw LanguageDetectionException::noReliableLanguage();
     }
 }

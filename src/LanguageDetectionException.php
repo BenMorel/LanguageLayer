@@ -74,6 +74,14 @@ class LanguageDetectionException extends \Exception
     }
 
     /**
+     * @return LanguageDetectionException
+     */
+    public static function noReliableLanguage() : self
+    {
+        return new self('Could not determine a reliable language for this text.');
+    }
+
+    /**
      * Returns the error type, such as 'invalid_access_key'.
      *
      * If this exception is not due to an error reported by the API itself, this method returns null.
