@@ -37,7 +37,7 @@ foreach ($results as $result) {
 }
 ```
 
-The `detect()` method returns an array of [LanguageDetectionResult](https://github.com/BenMorel/LanguageLayer/blob/master/src/LanguageDetectionResult.php) objects,
+The `detect()` method returns an array of [LanguageDetectionResult](https://github.com/BenMorel/LanguageLayer/blob/0.1.0/src/LanguageDetectionResult.php) objects,
 that you can inspect to decide what to do with each detected language.
 
 ### Detecting a single language
