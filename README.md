@@ -55,7 +55,7 @@ returned a single result, it will also accept it, unless the second parameter, `
 $languageCode = $client->detectLanguage('...', true); // will not accept a single result, if not "reliable"
 ```
 
-If no single, acceptable result is found, a `LanguageDetectionException` is thrown.
+If no single, acceptable result is found, a [LanguageDetectionException](https://github.com/BenMorel/LanguageLayer/blob/0.1.0/src/LanguageDetectionException.php) is thrown.
 
 ### Error handling
 
@@ -80,7 +80,7 @@ If the exception was caused by an HTTP error, you can inspect the underlying [Gu
 by calling `$exception->getPrevious()` if needed.
 
 If the exception was caused by an error returned by the LanguageLayer API itself, you can inspect it,
-in addition to the exception message, with `$exception->getCode()` and `$exception->getType()`.
+in addition to the exception message, with `$exception->getCode()` and [$exception->getType()](https://github.com/BenMorel/LanguageLayer/blob/0.1.0/src/LanguageDetectionException.php#L98).
 
 You can, for example, act upon specific API errors:
 
