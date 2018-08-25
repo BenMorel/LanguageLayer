@@ -50,7 +50,7 @@ $client = new LanguageLayerClient('YOUR API KEY', true);
 
 ### Detecting a single language
 
-As a convenience, a `detectLanguage()` methods helps you detect a single language from a text:
+As a convenience, the `detectLanguage()` method helps you detect a single language from a text:
 
 ```php
 $languageCode = $client->detectLanguage('Some text. Try more than a few words for accurate detection.');
