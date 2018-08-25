@@ -76,7 +76,7 @@ catch (LanguageDetectionException $exception) {
 }
 ```
 
-If the exception was caused by an HTTP error, you can inspect the underlying `GuzzleException`
+If the exception was caused by an HTTP error, you can inspect the underlying [Guzzle](http://docs.guzzlephp.org) exception
 by calling `$exception->getPrevious()` if needed.
 
 If the exception was caused by an error returned by the LanguageLayer API itself, you can inspect it,
