@@ -17,20 +17,91 @@ composer require benmorel/languagelayer
 
 This library requires PHP 7.1 or later.
 
-## Project status & release process
-
-This library is under development.
-
-The current releases are numbered `0.x.y`. When a non-breaking change is introduced (adding new methods, optimizing
-existing code, etc.), `y` is incremented.
-
-**When a breaking change is introduced, a new `0.x` version cycle is always started.**
-
-It is therefore safe to lock your project to a given release cycle, such as `0.1.*`.
-
-If you need to upgrade to a newer release cycle, check the [release history](https://github.com/BenMorel/LanguageLayer/releases)
-for a list of changes introduced by each further `0.x.0` version.
-
 ## Quickstart
 
 You need a free API key from LanguageLayer to get started.
+
+Just instantiate the LanguageLayer client, and start detecting:
+
+```php
+use BenMorel\LanguageLayer\LanguageLayerClient;
+
+$client = new LanguageLayerClient('YOUR API KEY');
+
+$results = $client->detectLanguages('Some text. Try more than a few words for accurate detection.');
+
+foreach ($results as $result) {
+    if ($result->isReliableResult()) {
+        echo $result->getLanguageCode();
+    }
+}
+```
+
+The `detect()` method returns an array of [LanguageDetectionResult](https://github.com/BenMorel/LanguageLayer/blob/master/src/LanguageDetectionResult.php) objects,
+that you can inspect to decide what to do with each detected language.
+
+### Detecting a single language
+
+As a convenience, a `detectLanguage()` methods helps you detect a single language from a text:
+
+```php
+$languageCode = $client->detectLanguage('Some text. Try more than a few words for accurate detection.');
+```
+
+This method attemps to find a single *reliable* result, if several results are returned, and will also accept a single result,
+even if not *reliable*, unless the second parameter, `$forceReliable`, is set to true.
+
+```
+$languageCode = $client->detectLanguage('...', true); // will not accept a single result, if not reliable
+```
+
+If no single, acceptable result is found, a `LanguageDetectionException` is thrown.
+
+### Error handling
+
+Any kind of error—an HTTP error, an error returned by the API, or any other kind of error related to this
+library—throws a `LanguageDetectionException`.
+
+Therefore you should wrap all your `detectLanguage()` and `detectLanguages()` calls in a `try`/`catch` block:
+
+```php
+use BenMorel\LanguageLayer\LanguageDetectionException;
+
+// …
+
+try {
+    $languageCode = $client->detectLanguage('...');
+catch (LanguageDetectionException $exception) {
+    // deal with it.
+}
+```
+
+If the exception was caused by an HTTP error, you can inspect the underlying `GuzzleException`
+by calling `$exception->getPrevious()` if needed.
+
+If the exception was caused by an error returned by the LanguageLayer API itself, you can inspect it,
+in addition to the exception message, with `$exception->getCode()` and `$exception->getType()`.
+
+You can, for example, act upon specific API errors:
+
+```php
+try {
+    $languageCode = $client->detectLanguage('...');
+} catch (LanguageDetectionException $exception) {
+    switch ($exception->getType()) {
+        case 'invalid_access_key':
+        case 'usage_limit_reached':
+            // report the error!
+            break;
+
+        case 'rate_limit_reached':
+            // slow down!
+        
+        // ...
+    }
+}
+```
+
+Note: if the exception was not caused by an error returned by the API itself, `getType()` will return `null`.
+
+See the [LanguageLayer documentation](https://languagelayer.com/documentation#error_codes) for a list of error codes and types.
