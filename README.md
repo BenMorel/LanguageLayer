@@ -48,11 +48,11 @@ As a convenience, a `detectLanguage()` methods helps you detect a single languag
 $languageCode = $client->detectLanguage('Some text. Try more than a few words for accurate detection.');
 ```
 
-This method attemps to find a single *reliable* result, if several results are returned, and will also accept a single result,
-even if not *reliable*, unless the second parameter, `$forceReliable`, is set to true.
+This method loops through the results to find a single *reliable* result. If it there is no reliable result, but the API
+returned a single result, it will also accept it, unless the second parameter, `$forceReliable`, is set to true:
 
 ```
-$languageCode = $client->detectLanguage('...', true); // will not accept a single result, if not reliable
+$languageCode = $client->detectLanguage('...', true); // will not accept a single result, if not "reliable"
 ```
 
 If no single, acceptable result is found, a `LanguageDetectionException` is thrown.
