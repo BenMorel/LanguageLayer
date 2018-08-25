@@ -74,11 +74,18 @@ class LanguageDetectionException extends \Exception
     }
 
     /**
+     * @param int $resultCount
+     * @param int $reliableResultCount
+     *
      * @return LanguageDetectionException
      */
-    public static function noReliableLanguage() : self
+    public static function noSingleLanguage(int $resultCount, int $reliableResultCount) : self
     {
-        return new self('Could not determine a reliable language for this text.');
+        return new self(sprintf(
+            'Could not reliably determine a single language for this text: %d possible language(s), %d reliable.',
+            $resultCount,
+            $reliableResultCount
+        ));
     }
 
     /**

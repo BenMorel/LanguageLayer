@@ -81,10 +81,10 @@ class LanguageLayerClient
     /**
      * Attempts to detect a single language for the given text.
      *
-     * If the API returns several results, the first reliable result is returned.
-     * If the API returns a single result, this result is returned unless `$forceReliable` is set to true.
+     * If the API returns a single reliable result (even among other non-reliable results), the reliable result is returned.
+     * If the API returns a single, non-reliable result, this result is returned unless `$forceReliable` is set to true.
      *
-     * If no acceptable language is found, an exception is thrown.
+     * If no single acceptable result is found, an exception is thrown.
      *
      * @param string $text          The text to detect.
      * @param bool   $forceReliable If false (default), a single language, even if not reliable, is accepted.
@@ -92,22 +92,32 @@ class LanguageLayerClient
      *
      * @return string The 2-digit language code of the detected language.
      *
-     * @throws LanguageDetectionException If the detection fails, or there is no acceptable result.
+     * @throws LanguageDetectionException If the detection fails, or there is no single result.
      */
-    public function detectLanguage(string $text, bool $forceReliable = false) : ?string
+    public function detectLanguage(string $text, bool $forceReliable = false) : string
     {
         $results = $this->detectLanguages($text);
 
-        if (! $forceReliable && count($results) === 1) {
-            return $results[0];
-        }
+        /** @var LanguageDetectionResult[] $reliableResults */
+        $reliableResults = [];
 
         foreach ($results as $result) {
             if ($result->isReliableResult()) {
-                return $result->getLanguageCode();
+                $reliableResults[] = $results;
             }
         }
 
-        throw LanguageDetectionException::noReliableLanguage();
+        $resultCount = count($results);
+        $reliableResultCount = count($reliableResults);
+
+        if ($reliableResultCount === 1) {
+            return $reliableResults[0]->getLanguageCode();
+        }
+
+        if (! $forceReliable && $resultCount === 1) {
+            return $results[0]->getLanguageCode();
+        }
+
+        throw LanguageDetectionException::noSingleLanguage($resultCount, $reliableResultCount);
     }
 }
