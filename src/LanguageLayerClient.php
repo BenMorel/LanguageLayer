@@ -103,7 +103,7 @@ class LanguageLayerClient
 
         foreach ($results as $result) {
             if ($result->isReliableResult()) {
-                $reliableResults[] = $results;
+                $reliableResults[] = $result;
             }
         }
 
