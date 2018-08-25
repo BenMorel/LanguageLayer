@@ -11,7 +11,9 @@ use GuzzleHttp\Exception\GuzzleException;
  */
 class LanguageLayerClient
 {
-    private const ENDPOINT = 'http://apilayer.net/api/detect';
+    private const DOMAIN = 'apilayer.net';
+
+    private const ENDPOINT = '/api/detect';
 
     /**
      * @var \GuzzleHttp\Client
@@ -26,11 +28,17 @@ class LanguageLayerClient
     /**
      * Class constructor.
      *
-     * @param string $apiKey
+     * @param string $apiKey   The LanguageLayer API key.
+     * @param bool   $useHttps Whether to use an https connection. Requires a paid plan.
      */
-    public function __construct(string $apiKey)
+    public function __construct(string $apiKey, bool $useHttps = false)
     {
-        $this->httpClient = new Client();
+        $scheme = $useHttps ? 'https' : 'http';
+
+        $this->httpClient = new Client([
+            'base_uri' => $scheme . '://' . self::DOMAIN
+        ]);
+
         $this->apiKey = $apiKey;
     }
 

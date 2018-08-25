@@ -40,6 +40,14 @@ foreach ($results as $result) {
 The `detectLanguages()` method returns an array of [LanguageDetectionResult](https://github.com/BenMorel/LanguageLayer/blob/0.1.0/src/LanguageDetectionResult.php) objects,
 that you can inspect to decide what to do with each detected language.
 
+### Using https
+
+You can use the API over a secure connection, if you have a paid plan that supports it:
+
+```
+$client = new LanguageLayerClient('YOUR API KEY', true);
+```
+
 ### Detecting a single language
 
 As a convenience, a `detectLanguage()` methods helps you detect a single language from a text:
