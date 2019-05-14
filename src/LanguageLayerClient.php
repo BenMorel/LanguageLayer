@@ -11,9 +11,9 @@ use GuzzleHttp\Exception\GuzzleException;
  */
 class LanguageLayerClient
 {
-    private const DOMAIN = 'apilayer.net';
+    private const DOMAIN = 'api.languagelayer.com';
 
-    private const ENDPOINT = '/api/detect';
+    private const ENDPOINT = '/detect';
 
     /**
      * @var \GuzzleHttp\Client
