@@ -34,7 +34,7 @@ class LanguageDetectionException extends \Exception
      * @param string|null     $type
      * @param \Throwable|null $previous
      */
-    private function __construct(string $message, int $code = 0, string $type = null, \Throwable $previous = null)
+    private function __construct(string $message, int $code = 0, ?string $type = null, ?\Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
 
