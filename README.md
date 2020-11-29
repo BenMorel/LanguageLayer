@@ -5,6 +5,8 @@ Perform language detection in PHP using the [LanguageLayer](https://languagelaye
 [![Latest Stable Version](https://poser.pugx.org/benmorel/languagelayer/v/stable)](https://packagist.org/packages/benmorel/languagelayer)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
 
+**Note: LanguageLayer is not being maintained anymore, and API calls started failing as of November 2020. This library is therefore archived.**
+
 ## Installation
 
 This library is installable via [Composer](https://getcomposer.org/):
